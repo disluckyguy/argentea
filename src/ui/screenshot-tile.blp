@@ -1,0 +1,25 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaLozenge : Box {
+  halign: center;
+  valign: center;
+  hexpand: false;
+  styles [
+    "context-tile-lozenge"
+  ]
+  Image image {
+    halign: center;
+    hexpand: true;
+    icon-name: "app-safety-unknown-symbolic";
+    pixel-size: 16;
+    visible: true;
+  }
+  Label label {
+    halign: center;
+    hexpand: true;
+    label: "???";
+    xalign: 0.5;
+    visible: false;
+  }
+}

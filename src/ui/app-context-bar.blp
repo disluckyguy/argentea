@@ -1,0 +1,166 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaAppContextBar : Box {
+  homogeneous: true;
+  spacing: 0;
+  styles [
+    "card"
+  ]
+  Box {
+    homogeneous: true;
+    Button storage_tile {
+      styles [
+        "context-tile",
+        "flat"
+      ]
+      Box {
+        orientation: vertical;
+        spacing: 8;
+        $ArgenteaLozenge storage_tile_lozenge {
+          circular: false;
+          styles [
+            "grey"
+          ]
+        }
+        Label storage_tile_title {
+          justify: center;
+          label: _("Download Size");
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "heading"
+          ]
+        }
+        Label storage_tile_description {
+          justify: center;
+          lines: 3;
+          ellipsize: end;
+          label: "Not relevent for this preview";
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "caption"
+          ]
+        }
+      }
+    }
+    Button safety_tile {
+      styles [
+        "context-tile",
+        "flat"
+      ]
+      Box {
+        orientation: vertical;
+        spacing: 8;
+        $ArgenteaLozenge safety_tile_lozenge {
+          circular: true;
+          styles [
+            "grey"
+          ]
+        }
+        Label safety_tile_title {
+          justify: center;
+          label: _("Safety");
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "heading"
+          ]
+        }
+        Label safety_tile_description {
+          justify: center;
+          lines: 3;
+          ellipsize: end;
+          label: "Not relevent for this preview";
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "caption"
+          ]
+        }
+      }
+    }
+  }
+  Box {
+    homogeneous: true;
+    Button hardware_support_tile {
+      styles [
+        "context-tile",
+        "flat"
+      ]
+      Box {
+        orientation: vertical;
+        spacing: 8;
+        $ArgenteaLozenge hardware_support_tile_lozenge {
+          circular: false;
+          styles [
+            "grey"
+          ]
+        }
+        Label hardware_support_tile_title {
+          justify: center;
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "heading"
+          ]
+        }
+        Label hardware_support_tile_description {
+          justify: center;
+          lines: 3;
+          ellipsize: end;
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "caption"
+          ]
+        }
+      }
+    }
+    Button age_rating_tile {
+      styles [
+        "context-tile",
+        "flat"
+      ]
+      Box {
+        orientation: vertical;
+        spacing: 8;
+        $ArgenteaLozenge age_rating_tile_lozenge {
+          circular: false;
+          styles [
+            "grey"
+          ]
+        }
+        Label age_rating_tile_title {
+          justify: center;
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "heading"
+          ]
+        }
+        Label age_rating_tile_description {
+          justify: center;
+          lines: 3;
+          ellipsize: end;
+          wrap: true;
+          xalign: 0.5;
+          styles [
+            "caption"
+          ]
+        }
+      }
+    }
+  }
+
+}
+SizeGroup size_group {
+  mode: vertical;
+  widgets [
+    storage_tile_lozenge,
+    safety_tile_lozenge,
+    hardware_support_tile_lozenge,
+    age_rating_tile_lozenge
+  ]
+}

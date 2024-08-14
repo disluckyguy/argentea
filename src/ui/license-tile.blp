@@ -1,0 +1,66 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaLicenseTile : Adw.Bin {
+  ListBox {
+    selection-mode: none;
+    valign: start;
+    styles [
+      "boxed-list"
+    ]
+    ListBoxRow {
+      activatable: false;
+      focusable: false;
+      Box {
+        orientation: vertical;
+        spacing: 8;
+        margin-top: 14;
+        margin-bottom: 14;
+        margin-start: 14;
+        margin-end: 14;
+        Box {
+          spacing: 8;
+          orientation: horizontal;
+          halign: center;
+          $ArgenteaLozenge lozenge0 {
+            circular: true;
+            icon-name: "community-supported-symbolic";
+            styles [
+              "green"
+            ]
+          }
+          $ArgenteaLozenge lozenge1 {
+            circular: true;
+            icon-name: "community-symbolic";
+            styles [
+              "green"
+            ]
+          }
+          $ArgenteaLozenge lozenge2 {
+            circular: true;
+            icon-name: "community-approved-symbolic";
+            styles [
+              "green"
+            ]
+          }
+        }
+        Label title_label {
+          label: _("Community Build");
+          styles [
+            "header"
+          ]
+        }
+        Label description-label {
+          label: _("This software is developed in the open by an international community, and released under the GNU GPL v3 license.\n\nYou can participate and help make it even better.");
+          wrap: true;
+          use-markup: true;
+        }
+      }
+    }
+    Adw.ButtonRow get_involved_row {
+      title: _("Get Involved");
+      end-icon-name: "external-link-symbolic";
+      use-underline: true;
+    }
+  }
+}

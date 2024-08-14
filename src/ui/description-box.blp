@@ -1,0 +1,34 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaDescriptionBox : Box {
+  orientation: vertical;
+  spacing: 24;
+  Label app_description {
+    hexpand: true;
+    halign: fill;
+    vexpand: false;
+    valign: start;
+    visible: true;
+    max-width-chars: 40;
+    selectable: true;
+    wrap: true;
+    xalign: 0;
+    label: " Vivamus rutrum id est a vestibulum. Aliquam luctus ante et nisl lobortis, ut vestibulum diam hendrerit. Donec id lorem eu mi eleifend imperdiet. Etiam sit amet eros arcu. Sed semper sodales turpis, quis euismod nibh sodales et. Praesent eleifend ut augue in iaculis. Nulla quis leo mi.\nDonec a scelerisque orci, in tristique eros. Vestibulum tellus dolor, sagittis nec venenatis hendrerit, molestie at ligula. In tempus porta condimentum. Morbi tempor sit amet quam ac tempus. In ac est dignissim, blandit nisi non, aliquet turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent sapien sapien, dapibus ac lorem et, feugiat fringilla ex. Duis venenatis venenatis tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+  }
+  Button expand_description {
+    label: _("Show More");
+
+    halign: center;
+    valign: center;
+    hexpand: false;
+    vexpand: false;
+    visible: true;
+    width-request: 120;
+    styles [
+      "circular",
+      "text-button",
+      "button"
+    ]
+  }
+}
