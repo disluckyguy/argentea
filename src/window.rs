@@ -18,15 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use sourceview5::prelude::*;
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use adw::{gio, glib};
-use crate::app_context_bar::ArgenteaAppContextBar;
-use crate::description_box::ArgenteaDescriptionBox;
-use crate::app_version_history_row::ArgenteaAppVersionHistoryRow;
-use crate::license_tile::ArgenteaLicenseTile;
-use sourceview5::View;
+use adw::{gio, glib, gdk};
+use crate::app_editor::ArgenteaAppEditor;
+use crate::app_preview::ArgenteaAppPreview;
+use appstream::Component;
+use xmltree::Element;
+
 
 mod imp {
     use super::*;
@@ -36,21 +35,17 @@ mod imp {
     pub struct ArgenteaWindow {
         // Template widgets
         #[template_child]
-        pub header_bar: TemplateChild<adw::HeaderBar>,
+        pub stack: TemplateChild<gtk::Stack>,
+        #[template_child]
+        pub bin: TemplateChild<adw::Bin>,
+        #[template_child]
+        pub toast_overlay: TemplateChild<adw::ToastOverlay>,
         #[template_child]
         pub editor_toggle: TemplateChild<gtk::ToggleButton>,
         #[template_child]
-        pub editor_stack: TemplateChild<gtk::Stack>,
+        pub app_editor: TemplateChild<ArgenteaAppEditor>,
         #[template_child]
-        pub context_bar: TemplateChild<ArgenteaAppContextBar>,
-        #[template_child]
-        pub app_description_box: TemplateChild<ArgenteaDescriptionBox>,
-        #[template_child]
-        pub version_history_row: TemplateChild<ArgenteaAppVersionHistoryRow>,
-        #[template_child]
-        pub license_tile: TemplateChild<ArgenteaLicenseTile>,
-        #[template_child]
-        pub source_view: TemplateChild<View>,
+        pub app_preview: TemplateChild<ArgenteaAppPreview>,
     }
 
     #[glib::object_subclass]
@@ -61,6 +56,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
+            klass.bind_template_callbacks();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
@@ -74,14 +70,60 @@ mod imp {
 
             let obj = self.obj();
 
-            obj.setup_source_view();
             obj.setup_binds();
+            obj.setup_drop_target();
         }
     }
     impl WidgetImpl for ArgenteaWindow {}
     impl WindowImpl for ArgenteaWindow {}
     impl ApplicationWindowImpl for ArgenteaWindow {}
     impl AdwApplicationWindowImpl for ArgenteaWindow {}
+
+    #[gtk::template_callbacks]
+    impl ArgenteaWindow {
+        #[template_callback]
+        fn open_file_dialog(&self, _button: &gtk::Button) {
+            let filter = gtk::FileFilter::new();
+            filter.add_suffix("metainfo.xml");
+            filter.add_suffix("metainfo.xml.in");
+            let filters = gio::ListStore::from_iter(vec!(filter).into_iter());
+
+            let file_dialog = gtk::FileDialog::builder()
+                .accept_label("open")
+                .title("Open Metainfo File")
+                .filters(&filters)
+                .build();
+
+
+            file_dialog.open(Some(self.obj().as_ref()), None::<&gio::Cancellable>,glib::clone!(
+            #[weak(rename_to = obj)]
+            self.obj(),
+            move |result| {
+                if let Ok(file) = result {
+                    let file_name = file.parse_name().to_string();
+
+                    if file_name.len() < 12 {
+                        let toast = adw::Toast::new("Invalid file name");
+                        obj.imp().toast_overlay.add_toast(toast);
+                    }
+
+                    let path = file.path().expect("failed to get path").to_string_lossy().to_string();
+                    let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
+                    if let Err(_) = Component::try_from(&tree) {
+                        let toast = adw::Toast::new("Invalid file");
+                        obj.imp().toast_overlay.add_toast(toast);
+                    } else {
+                        obj.imp().app_editor.set_file(Some(&file));
+                        obj.imp().app_preview.set_file(Some(&file));
+                        obj.imp().stack.set_visible_child_name("preview-page");
+                    };
+                }
+
+
+            }));
+        }
+
+    }
 }
 
 glib::wrapper! {
@@ -96,31 +138,64 @@ impl ArgenteaWindow {
             .build()
     }
 
-    pub fn setup_source_view(&self) {
-        let style_manager = adw::StyleManager::default();
-        let text_buffer = self.imp().source_view.buffer();
-        let source_buffer = text_buffer
-            .downcast_ref::<sourceview5::Buffer>()
-            .expect("buffer must be SourceBuffer");
-        let language_manager = sourceview5::LanguageManager::default();
-        let language = language_manager.language("xml").expect("language not present");
-        source_buffer.set_language(Some(&language));
-        style_manager.bind_property("dark", source_buffer, "style-scheme")
-            .transform_to(move |_, is_dark: bool| {
-                let source_style_manager = sourceview5::StyleSchemeManager::default();
-                if is_dark {
-                    return Some(source_style_manager.scheme("Adwaita-dark").expect("failed to get scheme"));
+    pub fn setup_drop_target(&self) {
+        let drop_target = gtk::DropTarget::new(gio::File::static_type(), gdk::DragAction::COPY | gdk::DragAction::MOVE);
+
+
+        drop_target.connect_drop(glib::clone!(
+            #[weak(rename_to = obj)]
+            self,
+            #[upgrade_or_panic]
+            move |_,value, _, _| {
+                if let Ok(file) = value.get::<gio::File>() {
+                    let file_name = file.parse_name().to_string();
+
+                    if file_name.len() < 12 {
+                        let toast = adw::Toast::new("Invalid file name");
+                        obj.imp().toast_overlay.add_toast(toast);
+                    }
+
+                    let path = file.path().expect("failed to get path").to_string_lossy().to_string();
+                    let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
+                    if let Err(_) = Component::try_from(&tree) {
+                        let toast = adw::Toast::new("Invalid file");
+                        obj.imp().toast_overlay.add_toast(toast);
+                    } else {
+                        obj.imp().app_editor.set_file(Some(&file));
+                        obj.imp().app_preview.set_file(Some(&file));
+                        obj.imp().stack.set_visible_child_name("preview-page");
+                    };
                 }
-                Some(source_style_manager.scheme("Adwaita").expect("failed to get scheme"))
-            })
-            .sync_create()
-            .build();
+                false
+            }
+        ));
+
+        drop_target.connect_enter(glib::clone!(
+            #[weak(rename_to = bin)]
+            self.imp().bin,
+            #[upgrade_or_panic]
+            move |_,_, _| {
+                bin.add_css_class("overlay-drag-area-on-enter");
+                gdk::DragAction::COPY
+            }
+        ));
+
+        drop_target.connect_leave(glib::clone!(
+            #[weak(rename_to = bin)]
+            self.imp().bin,
+            #[upgrade_or_panic]
+            move |_| {
+                bin.remove_css_class("overlay-drag-area-on-enter");
+            }
+        ));
+
+        self.add_controller(drop_target);
     }
 
     pub fn setup_binds(&self) {
         let imp = self.imp();
 
-        imp.editor_toggle.bind_property("active", &imp.editor_stack.get(), "visible-child-name")
+        imp.editor_toggle.bind_property("active", &imp.app_editor.get(), "visible-editor")
             .transform_to(move |_, is_active: bool| {
                 if is_active {
                     return Some("source-view");
@@ -131,3 +206,5 @@ impl ArgenteaWindow {
             .build();
     }
 }
+
+

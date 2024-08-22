@@ -1,25 +1,50 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $ArgenteaLozenge : Box {
-  halign: center;
-  valign: center;
-  hexpand: false;
-  styles [
-    "context-tile-lozenge"
-  ]
-  Image image {
-    halign: center;
-    hexpand: true;
-    icon-name: "app-safety-unknown-symbolic";
-    pixel-size: 16;
-    visible: true;
-  }
-  Label label {
-    halign: center;
-    hexpand: true;
-    label: "???";
-    xalign: 0.5;
-    visible: false;
+template $ArgenteaScreenshotTile : FlowBoxChild {
+  Button {
+    hexpand: false;
+    styles [
+      "card"
+    ]
+    Overlay {
+      Stack picture_stack {
+        StackPage {
+          name: "picture";
+          child: Picture picture {
+
+          };
+        }
+        StackPage {
+          name: "spinner";
+          child: Adw.Spinner {
+            width-request: 16;
+            height-request: 16;
+          };
+        }
+      }
+
+      [overlay]
+      Box {
+        orientation: horizontal;
+        halign: end;
+        valign: end;
+        Button edit_screenshot {
+          icon-name: "remove-symbolic";
+          tooltip-text: _("Remove Icon");
+          styles [
+            "circular"
+          ]
+        }
+
+        Button remove_screenshot {
+          icon-name: "edit-symbolic";
+          tooltip-text: _("Edit Icon");
+          styles [
+            "circular"
+          ]
+        }
+      }
+    }
   }
 }

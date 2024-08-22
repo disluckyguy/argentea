@@ -21,6 +21,9 @@
 mod application;
 mod config;
 mod window;
+mod core;
+mod app_preview;
+mod app_editor;
 mod app_context_bar;
 mod lozenge;
 mod app_version_history_row;

@@ -1,0 +1,407 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaAppEditor : Adw.BreakpointBin {
+  width-request: 150;
+    height-request: 100;
+    Adw.Breakpoint {
+      condition("max-width: 350sp")
+      setters {
+          app_header.orientation: vertical;
+      }
+    }
+    Stack stack {
+      transition-type: crossfade;
+      StackPage {
+        name: "gui-editor";
+        child: ScrolledWindow {
+          Adw.Clamp {
+            maximum-size: 700;
+            tightening-threshold: 500;
+            margin-start: 24;
+            margin-end: 24;
+            margin-top: 24;
+            margin-bottom: 24;
+            Box {
+              orientation: vertical;
+              spacing: 24;
+              halign: fill;
+              valign: fill;
+              Stack icon_stack {
+                StackPage {
+                  name: "empty";
+                  child: Button add_icon {
+                    width-request: 128;
+                    height-request: 128;
+                    halign: center;
+                    valign: start;
+                    styles [
+                      "frame"
+                    ]
+                    CenterBox {
+                      margin-start: 10;
+                      margin-end: 10;
+                      orientation: vertical;
+                      halign: fill;
+                      valign: fill;
+                      [center]
+                      Box {
+                        orientation: vertical;
+                        spacing: 4;
+                        Image {
+                          pixel-size: 16;
+                          halign: fill;
+                          valign: center;
+                          icon-name: "plus-large-symbolic";
+                        }
+                        Label {
+                          label: _("Add Icon");
+                          halign: fill;
+                          xalign: 0.5;
+                        }
+                      }
+                    }
+                  };
+                }
+                StackPage {
+                  name: "present";
+                  child: Overlay {
+                    halign: center;
+                    Image app_icon {
+                      pixel-size: 128;
+                      halign: center;
+                    }
+
+                    [overlay]
+                    Button edit_icon {
+                      halign: end;
+                      valign: start;
+                      icon-name: "remove-symbolic";
+                      tooltip-text: _("Remove Icon");
+                      styles [
+                        "circular"
+                      ]
+                    }
+
+                    [overlay]
+                    Button remove_icon {
+                      halign: end;
+                      valign: end;
+                      icon-name: "edit-symbolic";
+                      tooltip-text: _("Edit Icon");
+                      styles [
+                        "circular"
+                      ]
+                    }
+                  };
+                }
+
+                }
+                Box app_header {
+                  orientation: horizontal;
+                  homogeneous: true;
+                  halign: fill;
+                  spacing: 12;
+                  ListBox {
+                    selection-mode: none;
+                    halign: fill;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.EntryRow app_name {
+                      title: _("App Name");
+                    }
+                  }
+                  ListBox {
+                    selection-mode: none;
+                    halign: fill;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.EntryRow developer_name {
+                      title: _("Developer Name");
+                    }
+                  }
+                }
+                FlowBox screenshot_box {
+                  selection-mode: none;
+                  halign: fill;
+                  homogeneous: true;
+                  row-spacing: 8;
+                  column-spacing: 8;
+                  FlowBoxChild {
+                    Box {
+                      halign: fill;
+                      valign: fill;
+                      Adw.Clamp {
+                        halign: start;
+                        width-request: 128;
+                        height-request: 72;
+                        maximum-size: 128;
+                        Button add_screenshot_button {
+                          icon-name: "plus-large-symbolic";
+                          halign: fill;
+                          valign: fill;
+                          styles [
+                        "frame"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+                Box {
+                  halign: fill;
+                  orientation: vertical;
+                  spacing: 4;
+                  ListBox {
+                    selection-mode: none;
+                    halign: fill;
+                    styles [
+                      "boxed-list-separate"
+                    ]
+                    Adw.EntryRow app_summary {
+                      title: _("App Summary");
+                    }
+                    ListBoxRow {
+                      Box {
+                        orientation: vertical;
+                        halign: fill;
+                        valign: fill;
+                        spacing: 4;
+                        margin-start: 10;
+                        margin-end: 10;
+                        margin-top: 5;
+                        margin-bottom: 5;
+                        Label {
+                          label: "App Description";
+                          halign: start;
+                          valign: start;
+                          styles [
+                        "dim-label",
+                        "caption"
+                          ]
+                        }
+                        TextView {
+                          height-request: 18;
+                          styles [
+                        "transparent-background"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                  LinkButton {
+                    halign: end;
+                    label: "Supported HTML Tags";
+                    uri: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element#inline_text_semantics";
+                    styles [
+                      "circular"
+                    ]
+                  }
+                }
+                Box {
+                  orientation: vertical;
+                  halign: fill;
+                  spacing: 12;
+                  ListBox {
+                    selection-mode: none;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.ActionRow app_color_row {
+                      title: "App Color";
+                      activatable-widget: app_color_button;
+                      [suffix]
+                      ColorDialogButton app_color_button {
+                        styles [
+                          "flat",
+                          "circular"
+                        ]
+                      }
+                    }
+                    Adw.ActionRow app_color_dark_row {
+                      title: "App Color";
+                      activatable-widget: app_color_dark_button;
+                      [suffix]
+                      ColorDialogButton app_color_dark_button {
+                        styles [
+                          "flat",
+                          "circular"
+                        ]
+                      }
+                    }
+                  }
+                  ListBox {
+                    selection-mode: none;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.ActionRow {
+                      title: "Content Rating";
+                      activatable: true;
+                      [suffix]
+                      Box {
+                        spacing: 8;
+                        Label {
+                          label: "All Ages";
+                          styles [
+                        "dim-label"
+                          ]
+                        }
+                        Image {
+                          pixel-size: 16;
+                          icon-name: "next-symbolic";
+                        }
+                      }
+                    }
+                  }
+                }
+                Adw.PreferencesGroup {
+                  Adw.SwitchRow keyboard_support {
+                    title: "Keyboard";
+                  }
+                  Adw.SwitchRow mouse_support {
+                    title: "Mouse";
+                  }
+                  Adw.SwitchRow touchscreen_support {
+                    title: "Touch Screen";
+                  }
+                  Adw.SwitchRow gamepad_support {
+                    title: "Gamepad";
+                  }
+                  Adw.SwitchRow graphics_tablet_support {
+                    title: "Graphics Tablet";
+                  }
+                }
+                Adw.PreferencesGroup {
+                  Adw.SpinRow min_width {
+                    title: "Minimium Width (pixels)";
+                    adjustment: Adjustment {
+                      lower: 1;
+                      step-increment: 1;
+                      value: 360;
+                    };
+                  }
+                  Adw.SpinRow min_height {
+                    title: "Minimium Height (pixels)";
+                    adjustment: Adjustment {
+                      lower: 1;
+                      step-increment: 1;
+                      value: 294;
+                    };
+                  }
+                }
+                ListBox version_history_list {
+                  selection-mode: none;
+                  styles [
+                    "boxed-list"
+                  ]
+                  Adw.ButtonRow add_version {
+                    start-icon-name: "plus-large-symbolic";
+                  }
+                }
+                Box {
+                  orientation: vertical;
+                  halign: fill;
+                  spacing: 12;
+                  ListBox {
+                    selection-mode: none;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.EntryRow app_homepage {
+                      title: "Homepage";
+                    }
+                    Adw.EntryRow app_bug_tracker {
+                      title: "Bug Tracker";
+                    }
+                    Adw.EntryRow app_donations {
+                      title: "Donations";
+                    }
+                    Adw.EntryRow app_translations {
+                      title: "Translations";
+                    }
+                  }
+                  ListBox {
+                    selection-mode: none;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.EntryRow contact_email {
+                      title: "Contact Email";
+                    }
+                  }
+                }
+                Adw.PreferencesGroup {
+                  Adw.ComboRow project_license {
+                    title: "Project License";
+                    model: StringList {
+                      strings [
+                        "Unknown",
+                        "CC-BY-1.0",
+                        "CC-BY-2.0",
+                        "CC-BY-2.5",
+                        "CC-BY-3.0",
+                        "CC-BY-4.0",
+                        "CC-BY-NC-1.0",
+                        "CC-BY-NC-2.0",
+                        "CC-BY-NC-2.5",
+                        "CC-BY-NC-3.0",
+                        "CC-BY-NC-4.0",
+                        "GPL-1.0",
+                        "GPL-1.0-only",
+                        "GPL-1.0-or-later",
+                        "GPL-2.0",
+                        "GPL-2.0-or-later",
+                        "GPL-3.0",
+                        "GPL-3.0-only",
+                        "GPL-3.0-or-later",
+                        "LGPL-2.0-only",
+                        "LGPL-2.0-or-later",
+                        "LGPL-2.1-only",
+                        "LGPL-2.1-or-later",
+                        "LGPL-3.0-only",
+                        "LGPL-3.0-or-later",
+                        "MIT",
+                        "CC-BY-SA-2.0",
+                        "0BSD",
+                        "Apache-1.0",
+                        "Apache-1.1",
+                        "Apache-2.0",
+                      ]
+                    };
+                  }
+                  Adw.ComboRow metadata_license{
+                    title: "Metadata License";
+                    model: StringList {
+                      strings [
+                        "Unknown",
+                        "FSFAP",
+                        "CC0-1.0",
+                        "CC-BY-3.0",
+                        "CC-BY-SA-3.0",
+                        "GFDL-1.3",
+                        "MIT"
+                      ]
+                    };
+                  }
+                }
+              }
+            }
+          };
+        }
+        StackPage {
+          name: "source-view";
+          child: ScrolledWindow {
+          $GtkSourceView source_view {
+            auto-indent: true;
+            enable-snippets: true;
+            smart-backspace: true;
+            indent-on-tab: true;
+
+        }
+      };
+    }
+  }
+}

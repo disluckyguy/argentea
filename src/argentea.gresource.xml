@@ -20,5 +20,8 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/computer-fail-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/help-link-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/contact-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/unknown-app-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/edit-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/remove-symbolic.svg</file>
   </gresource>
 </gresources>

@@ -5,8 +5,14 @@ edition = "2021"
 
 [dependencies]
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
+walkdir = "2.3.2"
 gtk = { version = "0.9.0", package = "gtk4", features = ["v4_14", "blueprint"] }
 sourceview5 = "0.9.0"
+home = "0.5.9"
+reqwest = "0.12.7"
+html2pango = "0.6.0"
+appstream = "0.2.2"
+xmltree = "0.10.3"
 
 [dependencies.adw]
 package = "libadwaita"

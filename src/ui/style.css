@@ -149,4 +149,12 @@ app-context-bar.vertical box:first-child .context-tile {
   background: transparent;
 }
 
+.overlay-drag-area-on-enter {
+  background-color: alpha(var(--accent-color), 0.35);
+}
 
+.overlay-drag-area {
+  box-shadow: none;
+  border-radius: 12px;
+  transition-duration: 0.5s;
+}

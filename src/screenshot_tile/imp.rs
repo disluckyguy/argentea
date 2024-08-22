@@ -2,14 +2,19 @@ use adw::glib;
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
-// use std::cell::{Cell, RefCell};
-// use glib::properties;
+use std::cell::{Cell, RefCell};
+use glib::Properties;
 
-#[derive(CompositeTemplate, Default)]
-// #[properties(wrapper_type = super::ArgenteaScreenshotTile)]
+#[derive(CompositeTemplate, Default, Properties)]
+#[properties(wrapper_type = super::ArgenteaScreenshotTile)]
 #[template(file = "src/ui/screenshot-tile.blp")]
 pub struct ArgenteaScreenshotTile {
-
+    #[property(get, set, construct)]
+    pub uri: RefCell<String>,
+    #[template_child]
+    pub icon_stack: TemplateChild<gtk::Stack>,
+    #[template_child]
+    pub picture: TemplateChild<gtk::Picture>,
 }
 
 #[glib::object_subclass]
@@ -28,7 +33,7 @@ impl ObjectSubclass for ArgenteaScreenshotTile {
 }
 
 // Trait shared by all GObjects
-// #[glib::derived_properties]
+#[glib::derived_properties]
 impl ObjectImpl for ArgenteaScreenshotTile {
     fn constructed(&self) {
         self.parent_constructed();

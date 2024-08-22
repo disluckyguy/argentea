@@ -6,12 +6,14 @@ use glib::Object;
 
 glib::wrapper! {
     pub struct ArgenteaScreenshotTile(ObjectSubclass<imp::ArgenteaScreenshotTile>)
-    @extends gtk::Box, gtk::Widget, glib::InitiallyUnowned,
+    @extends gtk::FlowBoxChild, gtk::Widget, glib::InitiallyUnowned,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl ArgenteaScreenshotTile {
-    pub fn new() -> Self {
-        Object::builder().build()
+    pub fn new(uri: &str) -> Self {
+        Object::builder()
+            .property("uri", uri)
+            .build()
     }
 }

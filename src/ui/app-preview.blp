@@ -1,0 +1,659 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaAppPreview: Adw.BreakpointBin {
+  width-request: 200;
+    height-request: 100;
+    Adw.Breakpoint {
+      condition("max-width: 694sp")
+      setters {
+        app_header.orientation: vertical;
+        context_bar.orientation: vertical;
+        license_box.orientation: vertical;
+        featured_banner_box.orientation: vertical;
+      }
+    }
+    Box {
+      orientation: vertical;
+      Adw.Banner banner {
+        title: "Preview of how the app listing will appear in app stores";
+        revealed: true;
+        styles [
+          "suggested-action"
+        ]
+      }
+      ScrolledWindow {
+        hexpand: true;
+        vexpand: true;
+        Box {
+          margin-top: 24;
+          margin-bottom: 24;
+          orientation: vertical;
+          spacing: 18;
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            Box header {
+              orientation: horizontal;
+              spacing: 24;
+              Image app_icon {
+                icon-name: "image-missing-symbolic";
+                halign: start;
+                pixel-size: 128;
+                styles [
+                  "icon-dropshadow"
+                ]
+              }
+              Box app_header {
+                orientation: horizontal;
+                spacing: 6;
+                margin-top: 6;
+                Box app_header_details {
+                  orientation: vertical;
+                  halign: fill;
+                  valign: center;
+                  hexpand: true;
+                  spacing: 6;
+                  Label app_title {
+                    halign: fill;
+                    valign: start;
+                    hexpand: true;
+                    xalign: 0;
+                    selectable: true;
+                    wrap: true;
+                    max-width-chars: 20;
+                    label: "Test";
+                    styles [
+                      "title-1"
+                    ]
+                  }
+                  Box {
+                    hexpand: true;
+                    spacing: 3;
+                    orientation: horizontal;
+                    visible: bind developer_name.visible;
+                    Label developer_name {
+                      ellipsize: end;
+                      wrap: false;
+                      selectable: true;
+                      max-width-chars: 100;
+                      xalign: 0;
+                      yalign: 0.5;
+                      hexpand: false;
+                      label: "Testing Tester";
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                  }
+                  Box star_box {
+                    halign: start;
+                    spacing: 2;
+                    Image {
+                      icon-name: "star-rounded-symbolic";
+                      pixel-size: 16;
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                    Image {
+                      icon-name: "star-rounded-symbolic";
+                      pixel-size: 16;
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                    Image {
+                      icon-name: "star-rounded-symbolic";
+                      pixel-size: 16;
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                    Image {
+                      icon-name: "star-rounded-symbolic";
+                      pixel-size: 16;
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                    Image {
+                      icon-name: "star-rounded-symbolic";
+                      pixel-size: 16;
+                      styles [
+                        "dim-label"
+                      ]
+                    }
+                  }
+                }
+                Box box_with_source {
+                  orientation: vertical;
+                  halign: start;
+                  valign: center;
+                  hexpand: false;
+                  margin-top: 6;
+                  spacing: 6;
+                  Box install_remove {
+                    orientation: horizontal;
+                    halign: center;
+                    spacing: 9;
+                    Button install_button {
+                      use-underline: true;
+                      label: _("Install");
+                      width-request: 105;
+                      can-focus: true;
+                      receives-default: true;
+                      halign: fill;
+                      valign: center;
+                      hexpand: true;
+                      styles [
+                        "suggested-action"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Stack screenshot_stack {
+            hhomogeneous: true;
+            halign: fill;
+            StackPage {
+              name: "carousel";
+              child: Box {
+                orientation: vertical;
+                styles [
+                  "frame",
+                  "view"
+                ]
+                Overlay {
+                  Adw.Carousel carousel {
+                    vexpand: true;
+                  }
+                  [overlay]
+                  Revealer previous_buton_revealer {
+                    halign: start;
+                    valign: center;
+                    transition-type: crossfade;
+                    Button previous_screenshot {
+                      width-request: 64;
+                      height-request: 64;
+                      margin-top: 9;
+                      margin-bottom: 9;
+                      margin-start: 9;
+                      margin-end: 9;
+                      icon-name: "previous-symbolic";
+                      accessibility {
+                        label: _("Previous Screenshot");
+                      }
+                      styles [
+                        "circular",
+                        "osd"
+                      ]
+                    }
+                  }
+                  [overlay]
+                  Revealer next_buton_revealer {
+                    halign: end;
+                    valign: center;
+                    transition-type: crossfade;
+                    Button next_screenshot {
+                      width-request: 64;
+                      height-request: 64;
+                      margin-top: 9;
+                      margin-bottom: 9;
+                      margin-start: 9;
+                      margin-end: 9;
+                      icon-name: "next-symbolic";
+                      accessibility {
+                        label: _("Next Screenshot");
+                      }
+                      styles [
+                        "circular",
+                        "osd"
+                      ]
+                    }
+                  }
+                }
+                Adw.CarouselIndicatorDots {
+                  carousel: carousel;
+                }
+              };
+            }
+            StackPage {
+              name: "fallback";
+              child: Box {
+                orientation: vertical;
+                spacing: 12;
+                height-request: 423;
+                hexpand: true;
+                halign: fill;
+                styles [
+                  "frame",
+                  "view"
+                ]
+                Image {
+                  pixel-size: 96;
+                  valign: end;
+                  icon-name: "image-missing-symbolic";
+                  vexpand: true;
+                  styles [
+                    "dim-label"
+                  ]
+                }
+                Label {
+                  halign: center;
+                  valign: start;
+                  vexpand: true;
+                  label: _("No Screenshots");
+                  styles [
+                    "dim-label",
+                    "title-2"
+                  ]
+                }
+              };
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            Box app_details {
+              orientation: vertical;
+              spacing: 12;
+              Label app_summary {
+                halign: fill;
+                valign: start;
+                hexpand: true;
+                xalign: 0;
+                selectable: true;
+                wrap: true;
+                max-width-chars: 60;
+                label: "A Test that Tests for Tests that Test";
+                styles [
+                  "title-2"
+                ]
+              }
+              $ArgenteaDescriptionBox app_description_box {
+              }
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            $ArgenteaAppContextBar context_bar {
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            ListBox version_history_list {
+              selection-mode: none;
+              halign: fill;
+              valign: start;
+              styles [
+                "boxed-list"
+              ]
+              $ArgenteaAppVersionHistoryRow version_history_row {
+                // always-expanded: false;
+              }
+              Adw.ButtonRow version_history_button_row {
+                title: _("Version History");
+                end-icon-name: "next-symbolic";
+              }
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            visible: bind infobar_details_eol.visible;
+            Box infobar_details_eol {
+              orientation: vertical;
+              visible: false;
+              Label {
+                justify: center;
+                label: _("Stopped Receiving Updates");
+                styles [
+                  "heading"
+                ]
+              }
+              Label label_eol {
+                justify: center;
+                wrap: true;
+              }
+              styles [
+                "card",
+                "warning",
+                "infobox"
+              ]
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            visible: bind infobar_details_problems_label.visible;
+            Box infobar_details_problems {
+              orientation: vertical;
+              Label infobar_details_problems_label {
+                visible: false;
+                justify: center;
+                label: _("Text is set in runtime");
+                wrap: true;
+                styles [
+                  "info"
+                ]
+              }
+              styles [
+                "card",
+                "warning",
+                "infobox"
+              ]
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            visible: bind label_webapp_warning.visible;
+            Label label_webapp_warning {
+              visible: false;
+              justify: center;
+              label: _("This app can only be used when there is an active internet connection.");
+              wrap: true;
+              styles [
+                "heading"
+              ]
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            visible: bind infobar_details_app_repo.visible;
+            Box infobar_details_app_repo {
+              visible: false;
+              orientation: vertical;
+              Label {
+                justify: center;
+                label: _("Software Repository Included");
+                wrap: true;
+                styles [
+                  "heading"
+                ]
+              }
+              Label {
+                justify: center;
+                label: _("This app includes a software repository which provides updates, as well as access to other software.");
+                wrap: true;
+              }
+              styles [
+                "card",
+                "info",
+                "infobox"
+              ]
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            visible: bind infobar_details_app_norepo.visible;
+            Box infobar_details_app_norepo {
+              visible: false;
+              orientation: vertical;
+              Label {
+                justify: center;
+                label: _("No Software Repository Included");
+                wrap: true;
+                styles [
+                  "heading"
+                ]
+              }
+              Label {
+                justify: center;
+                label: _("This app does not include a software repository. It will not be updated with new versions.");
+                wrap: true;
+              }
+              styles [
+                "card",
+                "info",
+                "infobox"
+              ]
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            Box license_box {
+              homogeneous: true;
+              spacing: 12;
+              $ArgenteaLicenseTile license_tile {
+                halign: fill;
+                valign: start;
+              }
+              Stack links_stack {
+                hhomogeneous: false;
+                vhomogeneous: false;
+                StackPage {
+                  name: "empty";
+                  child: Box {
+                    hexpand-set: true;
+                    styles [
+                      "card"
+                    ]
+                    Box {
+                      orientation: vertical;
+                      spacing: 8;
+                      margin-top: 14;
+                      margin-bottom: 14;
+                      margin-start: 14;
+                      margin-end: 14;
+                      valign: center;
+                      hexpand: true;
+                      styles [
+                        "dim-label"
+                      ]
+                      Image {
+                        icon-name: "dialog-question-symbolic";
+                        pixel-size: 96;
+                        margin-bottom: 8;
+                      }
+                      Label {
+                        label: _("No Metadata");
+                        styles [
+                          "heading"
+                        ]
+                      }
+                      Label no_meta_data_info {
+                        justify: center;
+                        wrap: true;
+                        xalign: 0.5;
+                        label: _("This app doesn't provide any links to a website, code repository or issue tracker.");
+                      }
+                    }
+                  };
+                }
+                StackPage {
+                  name: "links";
+                  child: ListBox {
+                    selection-mode: none;
+                    halign: fill;
+                    valign: start;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.ActionRow project_website_row {
+                      activatable: true;
+                      icon-name:"webpage-symbolic";
+                      title: _("Project Website");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                    Adw.ActionRow donate_row {
+                      activatable: true;
+                      icon-name:"donate-symbolic";
+                      title: _("Donate");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                    Adw.ActionRow translate_row {
+                      activatable: true;
+                      icon-name:"translations-symbolic";
+                      title: _("Contribute Translations");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                    Adw.ActionRow report_issue_row {
+                      activatable: true;
+                      icon-name:"computer-fail-symbolic";
+                      title: _("Report an Issue");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                    Adw.ActionRow help_row {
+                      activatable: true;
+                      icon-name:"help-link-symbolic";
+                      title: _("Help");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                    Adw.ActionRow contact_row {
+                      activatable: true;
+                      icon-name:"contact-symbolic";
+                      title: _("Contact");
+                      subtitle-lines: 1;
+                      use-underline: true;
+                      Image {
+                        icon-name: "external-link-symbolic";
+                      }
+                    }
+                  };
+                }
+              }
+            }
+          }
+          Adw.Clamp {
+            maximum-size: 860;
+            tightening-threshold: 576;
+            margin-start: 12;
+            margin-end: 12;
+            Box featured_banner_header {
+              orientation: vertical;
+              halign: fill;
+              hexpand: true;
+              spacing: 8;
+              Label {
+                label: _("Featured Banner");
+                halign: start;
+                styles [
+                  "heading"
+                ]
+              }
+              Box featured_banner_box {
+                orientation: horizontal;
+                homogeneous: true;
+                spacing: 8;
+                Box featured_banner_dark {
+                  orientation: vertical;
+                  halign: fill;
+                  hexpand: true;
+                  spacing: 12;
+                  styles [
+                    "banner-dark",
+                    "card"
+                  ]
+                  Image banner_dark_app_icon {
+                    halign: center;
+                    valign: center;
+                    pixel-size: 128;
+                    icon-name: bind app_icon.icon-name;
+                  }
+                  Label banner_dark_app_title {
+                    halign: fill;
+                    xalign: 0.5;
+                    wrap: true;
+                    justify: center;
+                    label: bind app_title.label;
+                    styles [
+                      "title-1"
+                    ]
+                  }
+                  Label banner_dark_app_summary {
+                    halign: fill;
+                    xalign: 0.5;
+                    wrap: true;
+                    justify: center;
+                    label: bind app_summary.label;
+                  }
+                }
+                Box featured_banner_light {
+                  orientation: vertical;
+                  halign: fill;
+                  hexpand: true;
+                  spacing: 12;
+                  styles [
+                    "banner-light",
+                    "card"
+                  ]
+                  Image banner_light_app_icon {
+                    halign: fill;
+                    vexpand: true;
+                    pixel-size: 128;
+                    icon-name: bind app_icon.icon-name;
+                  }
+                  Label banner_light_app_title {
+                    halign: fill;
+                    xalign: 0.5;
+                    wrap: true;
+                    justify: center;
+                    label: bind app_title.label;
+                    styles [
+                      "title-1"
+                    ]
+                  }
+                  Label banner_light_app_summary {
+                    halign: fill;
+                    xalign: 0.5;
+                    wrap: true;
+                    justify: center;
+                    label: bind app_summary.label;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+}
