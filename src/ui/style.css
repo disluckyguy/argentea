@@ -158,3 +158,14 @@ app-context-bar.vertical box:first-child .context-tile {
   border-radius: 12px;
   transition-duration: 0.5s;
 }
+
+.tag {
+  /* padding: 4px; */
+  border-radius: 15px;
+  background-color: alpha(var(--accent-color), 0.20);
+  color: var(--accent-color);
+}
+
+.tag label {
+  margin: 5px;
+}

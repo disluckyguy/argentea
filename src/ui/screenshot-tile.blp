@@ -2,47 +2,67 @@ using Gtk 4.0;
 using Adw 1;
 
 template $ArgenteaScreenshotTile : FlowBoxChild {
-  Button {
-    hexpand: false;
-    styles [
-      "card"
-    ]
-    Overlay {
-      Stack picture_stack {
-        StackPage {
-          name: "picture";
-          child: Picture picture {
+  Box {
+  halign: fill;
+  valign: fill;
+    Adw.Clamp {
+      halign: start;
+      width-request: 128;
+      height-request: 72;
+      maximum-size: 128;
+      Button {
+        hexpand: false;
+        styles [
+          "card",
+          "screenshot-tile"
+        ]
+        Overlay {
+          margin-top: 7;
+          margin-bottom: 7;
+          margin-start: 7;
+          margin-end: 7;
+          Stack picture_stack {
+            StackPage {
+              name: "spinner";
+              child: Adw.Spinner {
+                width-request: 32;
+                height-request: 32;
+                halign: center;
+                valign: center;
+              };
+            }
+            StackPage {
+              name: "picture";
+              child: Picture picture {
 
-          };
-        }
-        StackPage {
-          name: "spinner";
-          child: Adw.Spinner {
-            width-request: 16;
-            height-request: 16;
-          };
-        }
-      }
+              };
+            }
+          }
 
-      [overlay]
-      Box {
-        orientation: horizontal;
-        halign: end;
-        valign: end;
-        Button edit_screenshot {
-          icon-name: "remove-symbolic";
-          tooltip-text: _("Remove Icon");
-          styles [
-            "circular"
-          ]
-        }
+          [overlay]
+          Box {
+            orientation: horizontal;
+            halign: end;
+            valign: end;
+            spacing: 4;
+            Button edit_screenshot {
+              icon-name: "remove-symbolic";
+              tooltip-text: _("Remove Icon");
+              styles [
+                "circular",
+                "osd"
+              ]
+            }
 
-        Button remove_screenshot {
-          icon-name: "edit-symbolic";
-          tooltip-text: _("Edit Icon");
-          styles [
-            "circular"
-          ]
+            Button remove_screenshot {
+              icon-name: "edit-symbolic";
+              tooltip-text: _("Edit Icon");
+              styles [
+                "circular",
+                "osd"
+              ]
+            }
+          }
         }
       }
     }

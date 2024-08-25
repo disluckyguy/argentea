@@ -13,6 +13,9 @@ reqwest = "0.12.7"
 html2pango = "0.6.0"
 appstream = "0.2.2"
 xmltree = "0.10.3"
+async-channel = "2.3.1"
+tokio = { version = "1", features = ["rt-multi-thread"] }
+csscolorparser = "0.7.0"
 
 [dependencies.adw]
 package = "libadwaita"

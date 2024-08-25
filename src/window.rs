@@ -82,16 +82,16 @@ mod imp {
     #[gtk::template_callbacks]
     impl ArgenteaWindow {
         #[template_callback]
-        fn open_file_dialog(&self, _button: &gtk::Button) {
-            let filter = gtk::FileFilter::new();
-            filter.add_suffix("metainfo.xml");
-            filter.add_suffix("metainfo.xml.in");
-            let filters = gio::ListStore::from_iter(vec!(filter).into_iter());
+        fn open_file_dialog(&self) {
+            // let filter = gtk::FileFilter::new();
+            // filter.add_suffix("metainfo.xml");
+            // filter.add_suffix("metainfo.xml.in");
+            // let filters = gio::ListStore::from_iter(vec!(filter).into_iter());
 
             let file_dialog = gtk::FileDialog::builder()
                 .accept_label("open")
                 .title("Open Metainfo File")
-                .filters(&filters)
+                // .filters(&filters)
                 .build();
 
 
@@ -109,8 +109,9 @@ mod imp {
 
                     let path = file.path().expect("failed to get path").to_string_lossy().to_string();
                     let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
-                    if let Err(_) = Component::try_from(&tree) {
-                        let toast = adw::Toast::new("Invalid file");
+                    if let Err(err) = Component::try_from(&tree) {
+                        let toast = adw::Toast::new(&err.to_string());
+
                         obj.imp().toast_overlay.add_toast(toast);
                     } else {
                         obj.imp().app_editor.set_file(Some(&file));
@@ -157,8 +158,9 @@ impl ArgenteaWindow {
 
                     let path = file.path().expect("failed to get path").to_string_lossy().to_string();
                     let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
-                    if let Err(_) = Component::try_from(&tree) {
-                        let toast = adw::Toast::new("Invalid file");
+                    if let Err(err) = Component::try_from(&tree) {
+                        let toast = adw::Toast::new(&err.to_string());
+
                         obj.imp().toast_overlay.add_toast(toast);
                     } else {
                         obj.imp().app_editor.set_file(Some(&file));

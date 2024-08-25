@@ -27,10 +27,13 @@ mod app_editor;
 mod app_context_bar;
 mod lozenge;
 mod app_version_history_row;
+mod app_version_row;
 mod description_box;
 mod license_tile;
 mod screenshot_tile;
+mod add_screenshot_tile;
 
+use std::sync::OnceLock;
 use self::application::ArgenteaApplication;
 use self::window::ArgenteaWindow;
 
@@ -38,6 +41,14 @@ use config::{GETTEXT_PACKAGE, LOCALEDIR, PKGDATADIR};
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, textdomain};
 use adw::{gio, glib};
 use adw::prelude::*;
+use tokio::runtime::Runtime;
+
+fn runtime() -> &'static Runtime {
+    static RUNTIME: OnceLock<Runtime> = OnceLock::new();
+    RUNTIME.get_or_init(|| {
+        Runtime::new().expect("Setting up tokio runtime needs to succeed.")
+    })
+}
 
 fn main() -> glib::ExitCode {
     // Set up gettext translations

@@ -1,0 +1,23 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaAddScreenshotTile: FlowBoxChild {
+  Box {
+    halign: fill;
+    valign: fill;
+    Adw.Clamp {
+      halign: start;
+      width-request: 128;
+      height-request: 72;
+      maximum-size: 128;
+      Button add_screenshot_button {
+        icon-name: "plus-large-symbolic";
+        halign: fill;
+        valign: fill;
+        styles [
+          "frame"
+        ]
+      }
+    }
+  }
+}

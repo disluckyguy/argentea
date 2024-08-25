@@ -11,7 +11,8 @@ blueprints = custom_target('blueprints',
     'ui/screenshot-tile.blp',
     'ui/app-editor.blp',
     'ui/app-preview.blp',
-    'ui/license-tile.blp'
+    'ui/license-tile.blp',
+    'ui/add-screenshot-tile.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],

@@ -1,0 +1,31 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ArgenteaAppVersionRow : Adw.ActionRow {
+  activatable-widget: description_button;
+  [suffix]
+  Box developement_tag {
+    valign: center;
+    margin-end: 12;
+    visible: false;
+    Label {
+      label: _("developement");
+      styles [
+        "caption-heading"
+      ]
+    }
+    styles [
+      "tag",
+      "accent"
+    ]
+  }
+  [suffix]
+  Button description_button {
+    icon-name: "next-symbolic";
+    valign: center;
+    styles [
+      "flat",
+      "circular"
+    ]
+  }
+}

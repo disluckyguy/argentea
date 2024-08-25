@@ -2,7 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 template $ArgenteaAppEditor : Adw.BreakpointBin {
-  width-request: 150;
+    width-request: 150;
     height-request: 100;
     Adw.Breakpoint {
       condition("max-width: 350sp")
@@ -67,10 +67,7 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                   name: "present";
                   child: Overlay {
                     halign: center;
-                    Image app_icon {
-                      pixel-size: 128;
-                      halign: center;
-                    }
+
 
                     [overlay]
                     Button edit_icon {
@@ -79,7 +76,8 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                       icon-name: "remove-symbolic";
                       tooltip-text: _("Remove Icon");
                       styles [
-                        "circular"
+                        "circular",
+                        "osd"
                       ]
                     }
 
@@ -90,8 +88,14 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                       icon-name: "edit-symbolic";
                       tooltip-text: _("Edit Icon");
                       styles [
-                        "circular"
+                        "circular",
+                        "osd"
                       ]
+                    }
+
+                    Image app_icon {
+                      pixel-size: 128;
+                      halign: center;
                     }
                   };
                 }
@@ -124,6 +128,7 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                   }
                 }
                 FlowBox screenshot_box {
+                  orientation: horizontal;
                   selection-mode: none;
                   halign: fill;
                   homogeneous: true;
@@ -163,7 +168,7 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                     Adw.EntryRow app_summary {
                       title: _("App Summary");
                     }
-                    ListBoxRow {
+                    ListBoxRow app_description {
                       Box {
                         orientation: vertical;
                         halign: fill;
@@ -182,10 +187,10 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                         "caption"
                           ]
                         }
-                        TextView {
+                        TextView description_text {
                           height-request: 18;
                           styles [
-                        "transparent-background"
+                            "transparent-background"
                           ]
                         }
                       }
@@ -213,22 +218,45 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                       title: "App Color";
                       activatable-widget: app_color_button;
                       [suffix]
-                      ColorDialogButton app_color_button {
-                        styles [
-                          "flat",
-                          "circular"
-                        ]
+                      Box {
+                        spacing: 8;
+                        Label app_color_label {
+                          styles [
+                            "dim-label"
+                          ]
+                        }
+                        Button app_color_button {
+                          valign: center;
+                          clicked => $open_color_dialog() swapped;
+                          styles [
+                            "flat",
+                            "circular",
+                            "app-color-button"
+                          ]
+
+                        }
                       }
                     }
                     Adw.ActionRow app_color_dark_row {
-                      title: "App Color";
+                      title: "Dark App Color";
                       activatable-widget: app_color_dark_button;
                       [suffix]
-                      ColorDialogButton app_color_dark_button {
-                        styles [
-                          "flat",
-                          "circular"
-                        ]
+                      Box {
+                        spacing: 8;
+                        Label app_color_dark_label {
+                          styles [
+                            "dim-label"
+                          ]
+                        }
+                        Button app_color_dark_button {
+                          valign: center;
+                          clicked => $open_color_dialog_dark() swapped;
+                          styles [
+                            "flat",
+                            "circular",
+                            "app-color-button-dark"
+                          ]
+                        }
                       }
                     }
                   }
@@ -246,7 +274,7 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                         Label {
                           label: "All Ages";
                           styles [
-                        "dim-label"
+                            "dim-label"
                           ]
                         }
                         Image {
@@ -258,6 +286,7 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                   }
                 }
                 Adw.PreferencesGroup {
+                  title: "Input Device Support";
                   Adw.SwitchRow keyboard_support {
                     title: "Keyboard";
                   }
@@ -275,36 +304,53 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                   }
                 }
                 Adw.PreferencesGroup {
-                  Adw.SpinRow min_width {
-                    title: "Minimium Width (pixels)";
-                    adjustment: Adjustment {
-                      lower: 1;
-                      step-increment: 1;
-                      value: 360;
-                    };
+                  title: "Display Size Support";
+                  Adw.SwitchRow use_display_length {
+                    title: "Require Minimum Diplay Length";
                   }
-                  Adw.SpinRow min_height {
-                    title: "Minimium Height (pixels)";
+                  Adw.SpinRow min_length {
+                    title: "Display Length (pixels)";
+                    sensitive: bind use_display_length.active;
                     adjustment: Adjustment {
                       lower: 1;
                       step-increment: 1;
                       value: 294;
+                      upper: 3840;
                     };
-                  }
-                }
-                ListBox version_history_list {
-                  selection-mode: none;
-                  styles [
-                    "boxed-list"
-                  ]
-                  Adw.ButtonRow add_version {
-                    start-icon-name: "plus-large-symbolic";
                   }
                 }
                 Box {
                   orientation: vertical;
                   halign: fill;
                   spacing: 12;
+                  Label {
+                    label: "Releases";
+                    xalign: 0;
+                    styles [
+                      "heading"
+                    ]
+                  }
+                  ListBox version_history_list {
+                    selection-mode: none;
+                    styles [
+                      "boxed-list"
+                    ]
+                    Adw.ButtonRow add_version {
+                      start-icon-name: "plus-large-symbolic";
+                    }
+                  }
+                }
+                Box {
+                  orientation: vertical;
+                  halign: fill;
+                  spacing: 12;
+                  Label {
+                    label: "Web Links";
+                    xalign: 0;
+                    styles [
+                      "heading"
+                    ]
+                  }
                   ListBox {
                     selection-mode: none;
                     styles [
@@ -333,7 +379,40 @@ template $ArgenteaAppEditor : Adw.BreakpointBin {
                     }
                   }
                 }
+                Box {
+                  orientation: vertical;
+                  halign: fill;
+                  spacing: 12;
+                  Label {
+                    label: "Categaries";
+                    xalign: 0;
+                    styles [
+                      "heading"
+                    ]
+                  }
+                  FlowBox categories_box {
+                    orientation: horizontal;
+                    selection-mode: none;
+                    halign: fill;
+                    height-request: 100;
+                    valign: center;
+                    FlowBoxChild {
+                      Button add_catagory {
+                        styles [
+                          "suggested-action",
+                          "circular"
+                        ]
+                        Adw.ButtonContent {
+                          icon-name: "plus-large-symbolic";
+                          label: _("Add Catagories");
+
+                        }
+                      }
+                    }
+                  }
+                }
                 Adw.PreferencesGroup {
+                  title: "License";
                   Adw.ComboRow project_license {
                     title: "Project License";
                     model: StringList {
