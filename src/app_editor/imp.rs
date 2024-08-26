@@ -11,8 +11,7 @@ use crate::core::tools::*;
 #[properties(wrapper_type = super::ArgenteaAppEditor)]
 #[template(file = "src/ui/app-editor.blp")]
 pub struct ArgenteaAppEditor {
-    #[property(get, set, construct, nullable)]
-    pub file: RefCell<Option<gio::File>>,
+    pub metadata: RefCell<Option<libappstream::Metadata>>,
     #[property(get, set, default = "gui-editor", construct)]
     pub visible_editor: RefCell<String>,
     #[template_child]
@@ -99,6 +98,7 @@ impl ObjectImpl for ArgenteaAppEditor {
         self.parent_constructed();
 
         let obj = self.obj();
+        self.metadata.replace(Some(libappstream::Metadata::new()));
 
         obj.setup_source_view();
         obj.setup_binds();

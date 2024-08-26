@@ -23,7 +23,8 @@ use adw::subclass::prelude::*;
 use adw::{gio, glib, gdk};
 use crate::app_editor::ArgenteaAppEditor;
 use crate::app_preview::ArgenteaAppPreview;
-use appstream::Component;
+use libappstream::Metadata;
+use libappstream::prelude::*;
 use xmltree::Element;
 
 
@@ -107,17 +108,20 @@ mod imp {
                         obj.imp().toast_overlay.add_toast(toast);
                     }
 
-                    let path = file.path().expect("failed to get path").to_string_lossy().to_string();
-                    let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
-                    if let Err(err) = Component::try_from(&tree) {
-                        let toast = adw::Toast::new(&err.to_string());
+                    let metadata = Metadata::new();
 
-                        obj.imp().toast_overlay.add_toast(toast);
-                    } else {
-                        obj.imp().app_editor.set_file(Some(&file));
-                        obj.imp().app_preview.set_file(Some(&file));
-                        obj.imp().stack.set_visible_child_name("preview-page");
-                    };
+                    let appstream_file = libappstream::gio::File::for_path(file.path().expect("path doesn't exist"));
+                    match metadata.parse_file(&appstream_file, libappstream::FormatKind::Unknown) {
+                        Ok(()) => {
+                            obj.imp().app_editor.imp().metadata.replace(Some(metadata.clone()));
+                            obj.imp().stack.set_visible_child_name("preview-page");
+                        }
+                        Err(err) => {
+                            let toast = adw::Toast::new(&err.to_string());
+
+                            obj.imp().toast_overlay.add_toast(toast);
+                        }
+                    }
                 }
 
 
@@ -156,17 +160,20 @@ impl ArgenteaWindow {
                         obj.imp().toast_overlay.add_toast(toast);
                     }
 
-                    let path = file.path().expect("failed to get path").to_string_lossy().to_string();
-                    let tree = Element::parse(std::fs::read_to_string(&path).expect("failed to read").as_bytes()).unwrap_or(Element::new("none"));
-                    if let Err(err) = Component::try_from(&tree) {
-                        let toast = adw::Toast::new(&err.to_string());
+                    let metadata = Metadata::new();
 
-                        obj.imp().toast_overlay.add_toast(toast);
-                    } else {
-                        obj.imp().app_editor.set_file(Some(&file));
-                        obj.imp().app_preview.set_file(Some(&file));
-                        obj.imp().stack.set_visible_child_name("preview-page");
-                    };
+                    let appstream_file = libappstream::gio::File::for_path(file.path().expect("path doesn't exist"));
+                    match metadata.parse_file(&appstream_file, libappstream::FormatKind::Unknown) {
+                        Ok(()) => {
+                            obj.imp().app_editor.sync_metadata(&file);
+                            obj.imp().stack.set_visible_child_name("preview-page");
+                        }
+                        Err(err) => {
+                            let toast = adw::Toast::new(&err.to_string());
+
+                            obj.imp().toast_overlay.add_toast(toast);
+                        }
+                    }
                 }
                 false
             }
